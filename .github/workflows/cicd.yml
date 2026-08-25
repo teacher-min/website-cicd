@@ -1,10 +1,10 @@
-name: CI/CD Pipeline with Docker Hub & Docker Compose
+name: CI/CD Pipeline with Docker Hub & Docker Compose 
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   # STAGE 1: 이미지 빌드 및 Docker Hub 푸시
@@ -30,7 +30,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./backend
-          file: ./backend/Dockerfile  # 백엔드 Dockerfile 위치
+          file: ./backend/Dockerfile # 백엔드 Dockerfile 위치
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-backend:latest
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/my-backend:buildcache
@@ -51,7 +51,7 @@ jobs:
 
   # STAGE 2: EC2 배포 (Pull & Up)
   deploy:
-    needs: build-and-push  # 빌드 작업이 완벽히 끝난 후 실행
+    needs: build-and-push # 빌드 작업이 완벽히 끝난 후 실행
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
