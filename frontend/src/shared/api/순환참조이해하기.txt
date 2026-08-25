@@ -1,0 +1,167 @@
+1️⃣ App.jsx 실행
+   └─> store를 import 하려고 함
+/**
+ * App.jsx
+ */
+import store from "./store";  // 1. store 임포트
+
+function App() {
+  return (
+    <Provider store={store}>
+      <RouterProvider router={userRouter} />
+    </Provider>
+  );
+}
+-----------------------------------------------------
+2️⃣ store.js 로드 시작
+   └─> "authSlice가 필요해!"
+   └─> authSlice.js를 import
+/**
+ * store.js
+ */
+import authReducer from "./features/user/slices/authSlice";  // 2. authSlice 임포트
+
+const store = configureStore({
+  reducer: {
+    auth: authReducer,
+  }
+});
+-----------------------------------------------------
+3️⃣ authSlice.js 로드 시작
+   └─> "apiClient가 필요해!"
+   └─> authAPI.js를 import
+/**
+ * authSlice.js
+ */
+import authAPI from "../api/authAPI";  // 3. authAPI 임포트
+
+export const registerUserAction = createAsyncThunk(
+  authAPI.register();
+);
+export const loginUserAction = createAsyncThunk(
+  authAPI.login();
+);
+
+const initialState = { };
+
+const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    logout: () => {},
+    clearError: () => {},
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(registerUserAction.pending, () => {})
+      .addCase(registerUserAction.fulfiled, () => {})
+      .addCase(registerUserAction.rejected, () => {})
+      .addCase(loginUserAction.pending, () => {})
+      .addCase(loginUserAction.fulfiled, () => {})
+      .addCase(loginUserAction.rejected, () => {})
+  }
+});
+-----------------------------------------------------
+4️⃣ authAPI.js 로드 시작
+   └─> "axiosConfig가 필요해!"
+   └─> axiosConfig.js를 import 시도
+/**
+ * autAPI.js
+ */
+import apiClient from "../../../shared/api/axiosConfig";  // 4. axiosConfig 임포트
+
+const BASE_URL = "/api/auth";
+
+const authAPI = {
+  register: (userData) => {
+    return apiClient.post(`${BASE_URL}/register`, userData);
+  },
+  login: (credentials) => {
+    return apiClient.post(`${BASE_URL}/login`, credentials);
+  },
+  logout: () => {
+    return apiClient.post(`${BASE_URL}/logout`);
+  }
+}
+-----------------------------------------------------
+5️⃣ axiosConfig.js 로드 시작
+   └─> "store가 필요해!"
+   └─> store.js를 import 시도 ← 문제!
+/**
+ * axiosConfig.js
+ */
+import { logout } from "../../features/user/slices/authSlice";
+import store from "../../store";  // 5. store 임포트 (문제 발생)
+
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      store.dispatch(logout());
+    }
+    return Promise.reject(error);
+  }
+)
+
+❌ 에러 발생!
+   store.js는 아직 로드 중인데
+   다시 store.js를 불러오려고 함
+   → "Cannot access 'store' before initialization"
+
+ ----------------------------------------------
+ 
+ 👌 해결
+   마지막에 열리는 axiosConfig.js 파일 수정.
+   App.jsx로부터 store를 받아서 사용하는 방식으로 변경.
+
+1️⃣ axiosConfig.js
+/**
+ * axiosConfig.js
+ */ 
+import { logout } from "../../features/user/slices/authSlice";   // 삭제 (동적 import로 변경)
+import store from "../../store";                                 // 삭제 (setStore로 받아옴)
+
+// setStore() - App.jsx에서 호출하여 store를 전달해 줌
+let store;
+export const setStore = (storeInstance) => {
+  store = storeInstance;
+}
+
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      if (store) {
+        import("../../features/user/slices/authSlice")  // store를 받아오면 import 진행
+          .then(({ logout }) => {
+            store.dispatch(logout());
+          })
+      }
+    }
+    return Promise.reject(error);
+  }
+)
+
+----------------------------------------------
+
+2️⃣ App.jsx
+/**
+ * App.jsx
+ */
+import store from "./store";
+
+// 순환 참조 방지를 위해 axiosConfig.js 파일에 store 전달
+import { setStore } from "./shared/api/axiosConfig";
+setStore(store);
+
+function App() {
+  return (
+    <Provider store={store}>
+      <RouterProvider router={userRouter} />
+    </Provider>
+  );
+}

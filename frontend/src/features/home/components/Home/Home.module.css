@@ -1,0 +1,116 @@
+/* 홈 컨텐츠 */
+.homeContent {
+  padding: 1rem 0;
+}
+
+.section {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* 환영 메시지 */
+.greeting {
+  font-size: 1.5rem;
+  color: #212529;
+  margin: 0 0 1rem 0;
+  font-weight: 500;
+}
+
+.greeting strong {
+  color: #28a745;
+  font-weight: 600;
+}
+
+/* 설명 텍스트 */
+.description {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0 0 2rem 0;
+}
+
+/* 버튼 그룹 */
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* 버튼 공통 스타일 */
+.profileButton,
+.boardButton,
+.loginButton,
+.registerButton {
+  flex: 1;
+  min-width: 150px;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  display: inline-block;
+  text-align: center;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+/* 프로필 버튼 (그린) */
+.profileButton {
+  background-color: #28a745;
+}
+
+.profileButton:hover {
+  background-color: #218838;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* 게시판 버튼 (블루) */
+.boardButton {
+  background-color: #007bff;
+}
+
+.boardButton:hover {
+  background-color: #0056b3;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* 로그인 버튼 (그린) */
+.loginButton {
+  background-color: #28a745;
+}
+
+.loginButton:hover {
+  background-color: #218838;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* 회원가입 버튼 (밝은 그린) */
+.registerButton {
+  background-color: #20c997;
+}
+
+.registerButton:hover {
+  background-color: #1aa179;
+  box-shadow: 0 2px 8px rgba(32, 201, 151, 0.3);
+}
+
+@media (max-width: 480px) {
+  .greeting {
+    font-size: 1.25rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+  }
+
+  .profileButton,
+  .boardButton,
+  .loginButton,
+  .registerButton {
+    width: 100%;
+  }
+}

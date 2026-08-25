@@ -1,0 +1,29 @@
+/* 게시판 목록 페이지 */
+.boardListPage {
+  min-height: calc(100vh - 200px);
+  background-color: #f8f9fa;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .boardListPage {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}

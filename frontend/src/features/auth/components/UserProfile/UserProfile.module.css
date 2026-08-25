@@ -1,0 +1,56 @@
+/* 프로필 카드 */
+.profileCard {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+/* 프로필 항목 */
+.profileItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.profileItem:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #212529;
+}
+
+/* 데이터 없음 */
+.noData {
+  text-align: center;
+  color: #6c757d;
+  padding: 2rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .profileCard {
+    padding: 1.5rem;
+  }
+
+  .profileItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .value {
+    font-size: 0.95rem;
+  }
+}

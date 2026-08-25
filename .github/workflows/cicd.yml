@@ -1,0 +1,111 @@
+name: CI/CD Pipeline with Docker Hub & Docker Compose
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # STAGE 1: 이미지 빌드 및 Docker Hub 푸시
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. Docker Hub 로그인
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 2. Docker Buildx 설정 (멀티 플랫폼 및 캐싱 지원)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. 백엔드(Spring Boot) 이미지 빌드 및 푸시
+      - name: Build and push Backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile  # 백엔드 Dockerfile 위치
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-backend:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/my-backend:buildcache
+          cache-to: type=inline
+
+      # 4. 프론트엔드(React/Vite) 이미지 빌드 및 푸시
+      - name: Build and push Frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          build-args: |
+            VITE_API_SERVER_HOST=${{ secrets.ALLOWED_ORIGIN }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-frontend:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/my-frontend:buildcache
+          cache-to: type=inline
+
+  # STAGE 2: EC2 배포 (Pull & Up)
+  deploy:
+    needs: build-and-push  # 빌드 작업이 완벽히 끝난 후 실행
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. .env 파일 생성
+      - name: Create .env file
+        run: |
+          cat <<EOF > .env
+          DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+          MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER=${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+          JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+          ALLOWED_ORIGIN=${{ secrets.ALLOWED_ORIGIN }}
+          EOF
+
+      # 2. EC2 디렉토리 생성
+      - name: Create target directory
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: mkdir -p /home/ubuntu/website
+
+      # 3. docker-compose.yml 및 .env 만 EC2로 복사 (소스코드 복사 X)
+      - name: Copy Compose & Env files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.yml, .env"
+          target: "/home/ubuntu/website"
+
+      # 4. EC2에서 이미지 Pull 및 실행
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/website
+
+            # 1) 도커 허브에서 최신 이미지 풀
+            docker compose pull
+
+            # 2) 무중단 컨테이너 재시작
+            docker compose up -d
+
+            # 3) 사용하지 않는 구버전 이미지/더미 자원 일괄 정리
+            docker image prune -af
+
+            # 4) 구동 상태 확인
+            docker compose ps

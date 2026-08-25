@@ -1,0 +1,17 @@
+/* 게시글 상세 페이지 */
+.boardDetailPage {
+  min-height: calc(100vh - 200px);
+  background-color: #f8f9fa;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .boardDetailPage {
+    padding: 1rem;
+  }
+}

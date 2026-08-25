@@ -1,0 +1,111 @@
+/* 페이지네이션 컨테이너 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+/* 페이지 리스트 */
+.pageList {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+/* 공통 버튼 스타일 */
+.pageButton,
+.navButton {
+  min-width: 36px;
+  height: 36px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #dee2e6;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 페이지 번호 버튼 */
+.pageButton {
+  min-width: 40px;
+}
+
+.pageButton:hover:not(.active) {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.pageButton:active {
+  transform: scale(0.95);
+}
+
+/* 활성 페이지 */
+.pageButton.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  cursor: default;
+  font-weight: 600;
+}
+
+/* 네비게이션 버튼 (이전/다음) */
+.navButton:hover:not(:disabled) {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.navButton:disabled {
+  background-color: #f8f9fa;
+  color: #adb5bd;
+  border-color: #dee2e6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.navButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* 네비게이션 아이콘 */
+.navIcon {
+  font-size: 1.2rem;
+  line-height: 1;
+  font-weight: bold;
+}
+
+/* 포커스 스타일 (접근성) */
+.pageButton:focus,
+.navButton:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* 반응형 (모바일) */
+@media (max-width: 576px) {
+  .pageList {
+    gap: 0.25rem;
+  }
+
+  .pageButton,
+  .navButton {
+    min-width: 32px;
+    height: 32px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .navIcon {
+    font-size: 1rem;
+  }
+}

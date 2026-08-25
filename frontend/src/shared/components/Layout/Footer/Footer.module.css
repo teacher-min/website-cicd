@@ -1,0 +1,29 @@
+/* 푸터 */
+.footer {
+  background-color: white;
+  border-top: 1px solid #e9ecef;
+  margin-top: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+.copyright {
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .copyright {
+    font-size: 0.85rem;
+  }
+}

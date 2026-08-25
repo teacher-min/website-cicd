@@ -1,0 +1,226 @@
+/* 게시판 목록 컨테이너 */
+.boardListContainer {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.totalCount {
+  font-size: 0.95rem;
+  color: #6c757d;
+}
+
+.totalCount strong {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.createButton {
+  padding: 0.625rem 1.25rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.createButton:hover {
+  background-color: #0056b3;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* 테이블 래퍼 */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+/* 테이블 */
+.boardTable {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #dee2e6;
+}
+
+.boardTable thead {
+  background-color: #f8f9fa;
+}
+
+.boardTable th {
+  padding: 0.875rem;
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  font-size: 0.95rem;
+}
+
+.boardTable td {
+  padding: 0.875rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.boardTable tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* 컬럼 너비 */
+.colNumber {
+  width: 80px;
+}
+
+.colTitle {
+  text-align: left;
+}
+
+.colDate {
+  width: 180px;
+}
+
+/* 테이블 셀 */
+.number {
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.title {
+  text-align: left;
+}
+
+.titleLink {
+  color: #212529;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.titleLink:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.date {
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* 빈 메시지 */
+.emptyMessage {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+/* 페이지네이션 */
+.paginationWrapper {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+/* 로딩 컨테이너 */
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 에러 컨테이너 */
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.errorText {
+  color: #dc3545;
+  font-size: 1rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.reloadButton {
+  padding: 0.625rem 1.25rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reloadButton:hover {
+  background-color: #5a6268;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .boardListContainer {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .createButton {
+    width: 100%;
+  }
+
+  .boardTable th,
+  .boardTable td {
+    padding: 0.625rem;
+    font-size: 0.85rem;
+  }
+
+  .colNumber {
+    width: 50px;
+  }
+
+  /* ✅ tbody의 날짜 셀만 숨김 */
+  .boardTable tbody .date {
+    display: none;
+  }
+
+  /* ✅ thead의 날짜 헤더만 숨김 */
+  .boardTable thead th.colDate {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .totalCount {
+    font-size: 0.85rem;
+  }
+
+  .boardTable th,
+  .boardTable td {
+    padding: 0.5rem;
+  }
+}

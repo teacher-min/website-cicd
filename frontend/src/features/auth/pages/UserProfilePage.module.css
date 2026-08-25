@@ -1,0 +1,28 @@
+/* 프로필 페이지 */
+.profilePage {
+  min-height: calc(100vh - 200px);
+  background-color: #f8f9fa;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+  .profilePage {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}
