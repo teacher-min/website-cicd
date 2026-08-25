@@ -4,7 +4,7 @@ services:
     # 1) 도커 컨테이너 이름
     container_name: boot-container
     # 2) DockerHub 이미지 내려 받아서 사용
-    image: ${{ DOCKERHUB_USERNAME }}/my-backend:latest
+    image: ${DOCKERHUB_USERNAME}/my-backend:latest
     # 3) 이미 존재하는 외부 네트워크를 사용
     networks:
       - my-network
@@ -24,7 +24,7 @@ services:
     # 1) 도커 컨테이너 이름
     container_name: nginx-container
     # 2) DockerHub 이미지 내려 받아서 사용
-    image: ${{ DOCKERHUB_USERNAME }}/my-frontend:latest
+    image: ${DOCKERHUB_USERNAME}/my-frontend:latest
     # 3) 포트 포워딩 (외부에서 80 접속 허용)
     ports:
       - 80:80
